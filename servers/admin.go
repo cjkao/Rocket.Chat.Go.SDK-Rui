@@ -3,9 +3,9 @@ package services
 import (
 	"fmt"
 
-	"github.com/ruilisi/Rocket.Chat.Go.SDK/conf"
-	"github.com/ruilisi/Rocket.Chat.Go.SDK/models"
-	"github.com/ruilisi/Rocket.Chat.Go.SDK/rest"
+	"github.com/cjkao/Rocket.Chat.Go.SDK/conf"
+	"github.com/cjkao/Rocket.Chat.Go.SDK/models"
+	"github.com/cjkao/Rocket.Chat.Go.SDK/rest"
 )
 
 func RegisterAdmin(reg *models.RegisterUserRequest, client *rest.Client) (*rest.AddUserToRoleResponse, error) {

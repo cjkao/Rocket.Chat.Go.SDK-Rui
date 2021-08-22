@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/ruilisi/Rocket.Chat.Go.SDK/models"
+	"github.com/cjkao/Rocket.Chat.Go.SDK/models"
 )
 
 type UserGetAvatarResponse struct {

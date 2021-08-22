@@ -4,9 +4,9 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/ruilisi/Rocket.Chat.Go.SDK/common_testing"
-	"github.com/ruilisi/Rocket.Chat.Go.SDK/models"
-	"github.com/ruilisi/Rocket.Chat.Go.SDK/realtime"
+	"github.com/cjkao/Rocket.Chat.Go.SDK/common_testing"
+	"github.com/cjkao/Rocket.Chat.Go.SDK/models"
+	"github.com/cjkao/Rocket.Chat.Go.SDK/realtime"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -37,7 +37,7 @@ func getAuthenticatedClient(t *testing.T, name, email, password string) *Client 
 	_, regErr := rtClient.RegisterUser(credentials)
 	assert.Nil(t, regErr)
 
-	loginErr := client.Login(credentials)
+	_, loginErr := client.Login(credentials)
 	assert.Nil(t, loginErr)
 
 	return &client

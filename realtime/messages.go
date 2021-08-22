@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/Jeffail/gabs"
-	"github.com/ruilisi/Rocket.Chat.Go.SDK/models"
+	"github.com/cjkao/Rocket.Chat.Go.SDK/models"
 	"github.com/gopackage/ddp"
 )
 
@@ -87,6 +87,17 @@ func (c *Client) EditMessage(message *models.Message) error {
 	return nil
 }
 
+// https://rocket.chat/docs/developer-guides/realtime-api/method-calls/update-message
+//{"msg":"method","id":"23","method":"readMessages","params":["7wQxYLyASXixXwGTA"]}"
+// id
+func (c *Client) ReadMessages(message *models.Message) error {
+	_, err := c.ddp.Call("readMessages", message.RoomID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // DeleteMessage deletes a message
 // takes a message object
 //
@@ -106,6 +117,7 @@ func (c *Client) DeleteMessage(message *models.Message) error {
 // takes a message and emoji
 //
 // https://rocket.chat/docs/developer-guides/realtime-api/method-calls/set-reaction
+// "{"msg":"method","id":"19","method":"setReaction","params":[":grin:","T6rmmbxEvE9L4Hcs3"]}"
 func (c *Client) ReactToMessage(message *models.Message, reaction string) error {
 	_, err := c.ddp.Call("setReaction", reaction, message.ID)
 	if err != nil {

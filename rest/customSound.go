@@ -1,6 +1,6 @@
 package rest
 
-import "github.com/ruilisi/Rocket.Chat.Go.SDK/models"
+import "github.com/cjkao/Rocket.Chat.Go.SDK/models"
 
 type CustomSoundResponse struct {
 	Sounds []models.Sound `json:"sounds"`

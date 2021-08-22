@@ -3,7 +3,7 @@ package rest
 import (
 	"net/url"
 
-	"github.com/ruilisi/Rocket.Chat.Go.SDK/models"
+	"github.com/cjkao/Rocket.Chat.Go.SDK/models"
 )
 
 type SettingsMessageResponse struct {
