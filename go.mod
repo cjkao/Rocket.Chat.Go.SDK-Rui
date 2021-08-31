@@ -18,22 +18,23 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/subosito/gotenv v1.2.0 // indirect
 	golang.org/x/sys v0.0.0-20210510120138-977fb7262007 // indirect
-	golang.org/x/text v0.3.5 // indirect
+	golang.org/x/text v0.3.6 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/gin-gonic/gin v1.7.4
 	// github.com/gin-gonic/gin v1.7.4
 	github.com/gopackage/ddp v0.0.0-20170117053602-652027933df4
-	github.com/onsi/ginkgo v1.14.1 // indirect
-	github.com/onsi/gomega v1.10.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sony/sonyflake v1.0.0
-	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4 // indirect
+	golang.org/x/net v0.0.0-20210825183410-e898025ed96a // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
+
+replace github.com/gopackage/ddp => ../ddp
 
 require (
 	github.com/gin-contrib/sse v0.1.0 // indirect

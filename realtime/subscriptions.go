@@ -1,6 +1,7 @@
 package realtime
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -25,7 +26,7 @@ func (c *Client) Sub(name string, args ...interface{}) (chan string, error) {
 	}
 
 	msgChannel := make(chan string, default_buffer_size)
-	c.ddp.CollectionByName("stream-room-messages").AddUpdateListener(genericExtractor{msgChannel, "update"})
+	c.ddp.CollectionByName(name).AddUpdateListener(genericExtractor{msgChannel, "update"})
 
 	return msgChannel, nil
 }
@@ -37,6 +38,18 @@ type genericExtractor struct {
 
 func (u genericExtractor) CollectionUpdate(collection, operation, id string, doc ddp.Update) {
 	if operation == u.operation {
-		u.messageChannel <- fmt.Sprintf("%s -> update", collection)
+		b, _ := json.Marshal(doc)
+		u.messageChannel <- string(b) //fmt.Sprintf("%s -> update", collection)
 	}
+	// for _, listener := range c.listeners {
+	// 	listener.CollectionUpdate(c.Name, operation, id, doc)
+	// }
+}
+
+type genericExtractor2 struct {
+	messageChannel chan string
+}
+
+func (u genericExtractor2) CollectionUpdate(collection, operation, id string, doc ddp.Update) {
+	u.messageChannel <- fmt.Sprintf("%s -> update", collection)
 }
