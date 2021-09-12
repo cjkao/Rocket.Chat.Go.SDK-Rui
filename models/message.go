@@ -17,6 +17,7 @@ type Message struct {
 
 	Mentions []User `json:"mentions,omitempty"`
 	User     *User  `json:"u,omitempty"`
+	UnRead   bool   `json:"unread,omitempty"`
 	PostMessage
 
 	// Bot         interface{}  `json:"bot"`
