@@ -189,8 +189,35 @@ type GetRoomDiscussionResponse struct {
 	Total  int `json:"total"`
 }
 
-type CreateRoomResponse struct {
+type CreateDiscussionResponse struct {
 	Status
+	Discussion struct {
+		Rid        string `json:"rid"`
+		Name       string `json:"name"`
+		Fname      string `json:"fname"`
+		T          string `json:"t"`
+		Msgs       int    `json:"msgs"`
+		UsersCount int    `json:"usersCount"`
+		U          struct {
+			ID       string `json:"_id"`
+			Username string `json:"username"`
+		} `json:"u"`
+		Topic     string    `json:"topic"`
+		Prid      string    `json:"prid"`
+		Ts        time.Time `json:"ts"`
+		Ro        bool      `json:"ro"`
+		SysMes    bool      `json:"sysMes"`
+		Default   bool      `json:"default"`
+		UpdatedAt time.Time `json:"_updatedAt"`
+		ID        string    `json:"_id"`
+	} `json:"discussion"`
+}
+type CreateDiscussionInput struct {
+	Prid  string   `json:"prid"`
+	TName string   `json:"t_name"`
+	Users []string `json:"users,omitempty"`
+	Pmid  string   `json:"pmid,omitempty"`
+	Reply string   `json:"reply,omitempty"`
 }
 
 type LeaveRoomResponse struct {
@@ -223,11 +250,22 @@ func (c *Client) RoomInfo(params url.Values) (*GetRoomInfoResponse, error) {
 	return response, nil
 }
 
-func (c *Client) CreateDiscussion(discussionName string, room *models.Room) error {
+func (c *Client) CreateDiscussion(discussionName string, room *models.Room) (*CreateDiscussionResponse, error) {
 	var body = fmt.Sprintf(`{ "prid": "%v","t_name":"%v"}`, room.ID, discussionName)
-	return c.Post("rooms.createDiscussion", bytes.NewBufferString(body), new(CreateRoomResponse))
+	response := new(CreateDiscussionResponse)
+	if err := c.Post("rooms.createDiscussion", bytes.NewBufferString(body), response); err != nil {
+		return nil, err
+	}
+	return response, nil
 }
-
+func (c *Client) CreateDiscussion2(req *CreateDiscussionInput) (*CreateDiscussionResponse, error) {
+	body, _ := json.Marshal(req)
+	response := new(CreateDiscussionResponse)
+	if err := c.Post("rooms.createDiscussion", bytes.NewBuffer(body), response); err != nil {
+		return nil, err
+	}
+	return response, nil
+}
 func (c *Client) GetDiscussion(params url.Values) (*GetRoomDiscussionResponse, error) {
 	response := new(GetRoomDiscussionResponse)
 	if err := c.Get("rooms.getDiscussions", params, response); err != nil {
