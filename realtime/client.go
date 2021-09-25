@@ -45,7 +45,8 @@ func NewClient(serverURL *url.URL, debug bool) (*Client, error) {
 	c.sf = sf
 
 	if debug {
-		c.ddp.SetSocketLogActive(true)
+
+		// c.ddp.SetSocketLogActive(true)
 	}
 
 	if err := c.ddp.Connect(); err != nil {
