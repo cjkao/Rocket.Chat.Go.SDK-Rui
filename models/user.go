@@ -9,6 +9,7 @@ type User struct {
 	Status       string `json:"status"`
 	Token        string `json:"token"`
 	TokenExpires int64  `json:"tokenExpires"`
+	Type         string `json:"type"`
 }
 
 type CreateUserRequest struct {

@@ -2,6 +2,16 @@ package models
 
 import "time"
 
+type FullMessage struct {
+	Msg        string `json:"msg"`
+	Collection string `json:"collection"`
+	ID         string `json:"id"`
+	Fields     Fields `json:"fields"`
+}
+type Fields struct {
+	EventName string    `json:"eventName"`
+	Args      []Message `json:"args"`
+}
 type Message struct {
 	ID       string `json:"_id"`
 	RoomID   string `json:"rid"`
@@ -19,7 +29,7 @@ type Message struct {
 	User     *User  `json:"u,omitempty"`
 	UnRead   bool   `json:"unread,omitempty"`
 	PostMessage
-
+	MyMessage
 	// Bot         interface{}  `json:"bot"`
 	// CustomFields interface{} `json:"customFields"`
 	// Channels           []interface{} `json:"channels"`
@@ -38,6 +48,11 @@ type PostMessage struct {
 	Emoji       string       `json:"emoji,omitempty"`
 	Avatar      string       `json:"avatar,omitempty"`
 	Attachments []Attachment `json:"attachments,omitempty"`
+}
+type MyMessage struct {
+	RoomParticipant bool   `json:"roomParticipant,omitempty"`
+	RoomType        string `json:"roomType,omitempty"`
+	RoomName        string `json:"roomName,omitempty"`
 }
 
 // Attachment Payload for postmessage rest API
