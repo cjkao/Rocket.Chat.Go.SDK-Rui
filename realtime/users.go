@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"strconv"
 
-	"github.com/Jeffail/gabs"
+	"github.com/Jeffail/gabs/v2"
 	"github.com/cjkao/Rocket.Chat.Go.SDK/models"
 )
 
@@ -82,13 +82,14 @@ func (c *Client) Login(credentials *models.UserCredentials) (*models.User, error
 }
 
 func getUserFromData(data interface{}) *models.User {
-	document, _ := gabs.Consume(data)
+	document := gabs.Wrap(data)
 
 	expires, _ := strconv.ParseFloat(stringOrZero(document.Path("tokenExpires.$date").Data()), 64)
 	return &models.User{
 		ID:           stringOrZero(document.Path("id").Data()),
 		Token:        stringOrZero(document.Path("token").Data()),
 		TokenExpires: int64(expires),
+		Type:         stringOrZero(document.Path("type").Data()),
 	}
 }
 

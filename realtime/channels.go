@@ -3,7 +3,7 @@ package realtime
 import (
 	"log"
 
-	"github.com/Jeffail/gabs"
+	"github.com/Jeffail/gabs/v2"
 	"github.com/cjkao/Rocket.Chat.Go.SDK/models"
 )
 
@@ -30,9 +30,9 @@ func (c *Client) GetChannelsIn() ([]models.Channel, error) {
 		return nil, err
 	}
 
-	document, _ := gabs.Consume(rawResponse.(map[string]interface{})["update"])
+	document := gabs.Wrap(rawResponse.(map[string]interface{})["update"])
 
-	chans, err := document.Children()
+	chans := document.Children()
 
 	var channels []models.Channel
 
@@ -60,9 +60,9 @@ func (c *Client) GetChannelSubscriptions() ([]models.ChannelSubscription, error)
 		return nil, err
 	}
 
-	document, _ := gabs.Consume(rawResponse.(map[string]interface{})["update"])
+	document := gabs.Wrap(rawResponse.(map[string]interface{})["update"])
 
-	channelSubs, err := document.Children()
+	channelSubs := document.Children()
 
 	var channelSubscriptions []models.ChannelSubscription
 

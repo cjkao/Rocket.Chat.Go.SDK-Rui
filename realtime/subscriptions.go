@@ -2,7 +2,6 @@ package realtime
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 
 	"github.com/gopackage/ddp"
@@ -46,10 +45,10 @@ func (u genericExtractor) CollectionUpdate(collection, operation, id string, doc
 	// }
 }
 
-type genericExtractor2 struct {
-	messageChannel chan string
-}
+// type genericExtractor2 struct {
+// 	messageChannel chan string
+// }
 
-func (u genericExtractor2) CollectionUpdate(collection, operation, id string, doc ddp.Update) {
-	u.messageChannel <- fmt.Sprintf("%s -> update", collection)
-}
+// func (u genericExtractor2) CollectionUpdate(collection, operation, id string, doc ddp.Update) {
+// 	u.messageChannel <- fmt.Sprintf("%s -> update", collection)
+// }

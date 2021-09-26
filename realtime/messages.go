@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Jeffail/gabs"
+	"github.com/Jeffail/gabs/v2"
 	"github.com/cjkao/Rocket.Chat.Go.SDK/models"
 	"github.com/gopackage/ddp"
 )
@@ -41,8 +41,8 @@ func (c *Client) LoadHistory(roomID string) ([]models.Message, error) {
 
 	history := m.(map[string]interface{})
 
-	document, _ := gabs.Consume(history["messages"])
-	msgs, err := document.Children()
+	document := gabs.Wrap(history["messages"])
+	msgs := document.Children()
 
 	if err != nil {
 		log.Printf("response is in an unexpected format: %v", err)
@@ -210,6 +210,18 @@ func (c *Client) SubscribeToMessageStream(channel *models.Channel, msgChannel ch
 }
 
 // This will subscribe to all messages that you need as a bot
+func (c *Client) SubscribeToMyMessagesRaw(msgChannel chan map[string]interface{}) error {
+	if err := c.ddp.Sub("stream-room-messages", "__my_messages__", send_added_event); err != nil {
+		return err
+	}
+
+	if !messageListenerAdded {
+		c.ddp.CollectionByName("stream-room-messages").AddUpdateListener(messageExtractorRaw{msgChannel, "update"})
+		messageListenerAdded = true
+	}
+
+	return nil
+}
 func (c *Client) SubscribeToMyMessages(msgChannel chan models.Message) error {
 	if err := c.ddp.Sub("stream-room-messages", "__my_messages__", send_added_event); err != nil {
 		return err
@@ -224,13 +236,13 @@ func (c *Client) SubscribeToMyMessages(msgChannel chan models.Message) error {
 }
 
 func getMessagesFromUpdateEvent(update ddp.Update) []models.Message {
-	document, _ := gabs.Consume(update["args"])
-	args, err := document.Children()
+	document := gabs.Wrap(update["args"])
+	args := document.Children()
 
-	if err != nil {
-		log.Printf("Event arguments are in an unexpected format: %v", err)
-		return make([]models.Message, 0)
-	}
+	// if err != nil {
+	// 	log.Printf("Event arguments are in an unexpected format: %v", err)
+	// 	return make([]models.Message, 0)
+	// }
 
 	messages := make([]models.Message, len(args))
 
@@ -243,7 +255,7 @@ func getMessagesFromUpdateEvent(update ddp.Update) []models.Message {
 
 func getMessageFromData(data interface{}) *models.Message {
 	// TODO: We should know what this will look like, we shouldn't need to use gabs
-	document, _ := gabs.Consume(data)
+	document := gabs.Wrap(data)
 	return getMessageFromDocument(document)
 }
 
@@ -289,11 +301,22 @@ type messageExtractor struct {
 	operation      string
 }
 
+type messageExtractorRaw struct {
+	messageChannel chan map[string]interface{}
+	operation      string
+}
+
 func (u messageExtractor) CollectionUpdate(collection, operation, id string, doc ddp.Update) {
 	if operation == u.operation {
 		msgs := getMessagesFromUpdateEvent(doc)
 		for _, m := range msgs {
 			u.messageChannel <- m
 		}
+	}
+}
+
+func (u messageExtractorRaw) CollectionUpdate(collection, operation, id string, doc ddp.Update) {
+	if operation == u.operation {
+		u.messageChannel <- doc
 	}
 }

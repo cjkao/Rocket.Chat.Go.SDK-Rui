@@ -3,7 +3,7 @@ package realtime
 import (
 	"log"
 
-	"github.com/Jeffail/gabs"
+	"github.com/Jeffail/gabs/v2"
 	"github.com/cjkao/Rocket.Chat.Go.SDK/models"
 )
 
@@ -16,9 +16,9 @@ func (c *Client) GetPublicSettings() ([]models.Setting, error) {
 		return nil, err
 	}
 
-	document, _ := gabs.Consume(rawResponse)
+	document := gabs.Wrap(rawResponse)
 
-	sett, _ := document.Children()
+	sett := document.Children()
 
 	var settings []models.Setting
 
